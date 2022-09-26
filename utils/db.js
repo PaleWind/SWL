@@ -16,7 +16,7 @@ async function connect() {
     console.log("disconnecting");
     await mongoose.disconnect();
   }
-  console.log("ongouri,", process.env.MONGODB_URI);
+  console.log("mongouri,", process.env.MONGODB_URI);
   const db = await mongoose.connect(process.env.MONGODB_URI);
   connection.isConnected = db.connections[0].readyState;
   console.log("connected?", connection.isConnected);
