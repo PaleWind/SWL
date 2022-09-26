@@ -4,7 +4,7 @@ sendgrid.setApiKey(process.env.SENDGRID_KEY);
 
 async function sendEmail(req, res) {
   try {
-    console.log("REQ.BODY", req.body);
+    //.BODY", req.body);
     const {
       orderID,
       orderItems,

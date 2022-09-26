@@ -10,16 +10,12 @@ async function connect() {
   if (mongoose.connections.length > 0) {
     connection.isConnected = mongoose.connections[0].readyState;
     if (connection.isConnected === 1) {
-      console.log("connected");
       return;
     }
-    console.log("disconnecting");
     await mongoose.disconnect();
   }
-  console.log("mongouri,", process.env.MONGODB_URI);
   const db = await mongoose.connect(process.env.MONGODB_URI);
   connection.isConnected = db.connections[0].readyState;
-  console.log("connected?", connection.isConnected);
 }
 
 async function disconnect() {

@@ -40,7 +40,6 @@ export default function Home({ products }) {
 }
 
 export async function getServerSideProps() {
-  console.log("init");
   await db.connect();
   const products = await Product.find().lean();
   return {

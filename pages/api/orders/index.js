@@ -1,10 +1,9 @@
-import { getSession } from 'next-auth/react';
-import Order from '../../../models/Order';
-import db from '../../../utils/db';
+import { getSession } from "next-auth/react";
+import Order from "../../../models/Order";
+import db from "../../../utils/db";
 
 const handler = async (req, res) => {
   const session = await getSession({ req });
-  //console.log("body", req.body);
   var newOrder;
   await db.connect();
   // if (!session) {
@@ -12,7 +11,7 @@ const handler = async (req, res) => {
   //     ...req.body,
   //   });
   // } else {
-  //   const { user } = session;  
+  //   const { user } = session;
   //   newOrder = new Order({
   //     ...req.body,
   //     user: user._id
