@@ -1,26 +1,30 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const connection = {};
 
 async function connect() {
   if (connection.isConnected) {
+    console.log("connected");
     return;
   }
   if (mongoose.connections.length > 0) {
     connection.isConnected = mongoose.connections[0].readyState;
     if (connection.isConnected === 1) {
+      console.log("connected");
       return;
     }
+    console.log("disconnecting");
     await mongoose.disconnect();
   }
   const db = await mongoose.connect(process.env.MONGODB_URI);
   connection.isConnected = db.connections[0].readyState;
+  console.log("connected?", connection.isConnected);
 }
 
 async function disconnect() {
   if (connection.isConnected) {
-      await mongoose.disconnect();
-      connection.isConnected = false;
+    await mongoose.disconnect();
+    connection.isConnected = false;
   }
 }
 function convertDocToObj(doc) {
