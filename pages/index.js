@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { useContext } from 'react';
-import { toast } from 'react-toastify';
-import Layout from '../components/Layout';
-import ProductItem from '../components/ProductItem';
-import Product from '../models/Product';
-import db from '../utils/db';
-import { Store } from '../utils/Store';
+import axios from "axios";
+import { useContext } from "react";
+import { toast } from "react-toastify";
+import Layout from "../components/Layout";
+import ProductItem from "../components/ProductItem";
+import Product from "../models/Product";
+import db from "../utils/db";
+import { Store } from "../utils/Store";
 
 export default function Home({ products }) {
   const { state, dispatch } = useContext(Store);
@@ -17,11 +17,11 @@ export default function Home({ products }) {
     const { data } = await axios.get(`/api/products/${product._id}`);
 
     if (data.countInStock < quantity) {
-      return toast.error('Sorry. Product is out of stock');
+      return toast.error("Sorry. Product is out of stock");
     }
-    dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity } });
+    dispatch({ type: "CART_ADD_ITEM", payload: { ...product, quantity } });
 
-    toast.success('Product added to the cart');
+    toast.success("Product added to the cart");
   };
 
   return (
@@ -40,6 +40,7 @@ export default function Home({ products }) {
 }
 
 export async function getServerSideProps() {
+  console.log("init");
   await db.connect();
   const products = await Product.find().lean();
   return {
