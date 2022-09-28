@@ -1,56 +1,64 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import Layout from "../components/Layout";
 import { getError } from "../utils/error";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
+import axios from "axios";
 
-export default function LoginScreen() {
+export default function ForgotPasswordScreen() {
   const { data: session } = useSession();
   const router = useRouter();
-  const { redirect } = router.query;
-  const [emailInput, setEmailInput] = useState();
+  const { redirect, emailInput } = router.query;
+  const [userEmail, setUserEmail] = useState(emailInput);
 
   useEffect(() => {
     if (session?.user) {
-      router.push(redirect || "/");
+      router.push(redirect || "/profile");
     }
   }, [router, session, redirect]);
+
+  const sendPasswordResetLinkEmail = async (email) => {
+    const res = await axios.post("/api/email/sendPasswordResetLink/", {
+      email,
+    });
+  };
 
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
-  const submitHandler = async ({ email, password }) => {
+
+  const submitHandler = async ({ email }) => {
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-      if (result.error) {
+      const result = await sendPasswordResetLinkEmail(email);
+      if (result?.error) {
         toast.error(result.error);
       }
+      toast.success(
+        `An email with insctructions to reset your password was sent to ${email}`
+      );
     } catch (err) {
       toast.error(getError(err));
+      console.log("err", err);
     }
   };
+
   return (
-    <Layout title="Login">
+    <Layout title="Forgot Password?">
       <form
         className="mx-auto max-w-screen-md"
         onSubmit={handleSubmit(submitHandler)}
       >
-        <h1 className="mb-4 text-xl">Login</h1>
+        <h1 className="mb-4 text-xl">Forgot your password?</h1>
         <div className="mb-4">
           <label htmlFor="email">Email</label>
           <input
-            type="email"
+            type="text"
             {...register("email", {
-              onChange: (e) => setEmailInput(e.target.value),
               required: "Please enter email",
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
@@ -60,39 +68,20 @@ export default function LoginScreen() {
             className="w-full"
             id="email"
             autoFocus
+            value={userEmail ? userEmail : ""}
+            onChange={(event) => setUserEmail(event.target.value)}
           ></input>
           {errors.email && (
             <div className="text-red-500">{errors.email.message}</div>
           )}
         </div>
-        <div className="mb-4">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            {...register("password", {
-              required: "Please enter password",
-              minLength: { value: 6, message: "password is more than 5 chars" },
-            })}
-            className="w-full"
-            id="password"
-            autoFocus
-          ></input>
-          {errors.password && (
-            <div className="text-red-500 ">{errors.password.message}</div>
-          )}
+
+        <div className="mb-4 ">
+          <button className="primary-button">Send Link</button>
         </div>
         <div className="mb-4 ">
-          <button className="primary-button">Login</button>
-        </div>
-        <div className="mb-4 ">
-          Forgot your password? &nbsp;
-          <Link
-            href={`/forgot-password?redirect=${redirect || "/"}&emailInput=${
-              emailInput || "/"
-            }`}
-          >
-            Reset password
-          </Link>
+          Already have an account? &nbsp;
+          <Link href={`/login?redirect=${redirect || "/"}`}>Login</Link>
         </div>
         <div className="mb-4 ">
           Don&apos;t have an account? &nbsp;

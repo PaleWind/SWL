@@ -1,36 +1,38 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
-import Layout from "../components/Layout";
-import { getError } from "../utils/error";
+import Layout from "../../components/Layout";
+import { getError } from "../../utils/error";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
-export default function LoginScreen() {
+export default function ResetPasswordScreen() {
   const { data: session } = useSession();
+
   const router = useRouter();
   const { redirect } = router.query;
-  const [emailInput, setEmailInput] = useState();
 
   useEffect(() => {
     if (session?.user) {
-      router.push(redirect || "/");
+      router.push(redirect || "/profile");
     }
   }, [router, session, redirect]);
+
+  const sendPasswordResetEmail = async (email) => {
+    const res = await axios.post("/api/email/sendPasswordResetLink/", {
+      email,
+    });
+  };
 
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
-  const submitHandler = async ({ email, password }) => {
+  const submitHandler = async ({ email }) => {
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
+      const result = await sendPasswordResetEmail(email);
       if (result.error) {
         toast.error(result.error);
       }
@@ -50,7 +52,6 @@ export default function LoginScreen() {
           <input
             type="email"
             {...register("email", {
-              onChange: (e) => setEmailInput(e.target.value),
               required: "Please enter email",
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
@@ -83,16 +84,6 @@ export default function LoginScreen() {
         </div>
         <div className="mb-4 ">
           <button className="primary-button">Login</button>
-        </div>
-        <div className="mb-4 ">
-          Forgot your password? &nbsp;
-          <Link
-            href={`/forgot-password?redirect=${redirect || "/"}&emailInput=${
-              emailInput || "/"
-            }`}
-          >
-            Reset password
-          </Link>
         </div>
         <div className="mb-4 ">
           Don&apos;t have an account? &nbsp;

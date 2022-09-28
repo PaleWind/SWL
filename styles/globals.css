@@ -54,3 +54,42 @@ textarea {
 .alert-warn {
   @apply my-3 rounded-lg bg-yellow-100 p-3 text-yellow-700;
 }
+
+.small-image {
+  border-radius: 8px;
+  background-color: #ebebeb;
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.selected-small-image {
+  opacity: 0.5;
+}
+
+.product-detail-container {
+  display: flex;
+  gap: 40px;
+  margin: 40px;
+  margin-top: 60px;
+  color: #324d67;
+}
+
+.product-detail-image {
+  border-radius: 15px;
+  background-color: #ebebeb;
+
+  width: 400px;
+  height: 400px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+.product-detail-image:hover {
+  background-color: #f02d34;
+}
+.small-images-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}

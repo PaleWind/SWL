@@ -1,17 +1,17 @@
-import { createContext, useReducer } from 'react';
-import Cookies from 'js-cookie';
+import { createContext, useReducer } from "react";
+import Cookies from "js-cookie";
 
 export const Store = createContext();
 
 const initialState = {
-  cart: Cookies.get('cart')
-    ? JSON.parse(Cookies.get('cart'))
-    : { cartItems: [], shippingAddress: {}, paymentMethod: '' },
+  cart: Cookies.get("cart")
+    ? JSON.parse(Cookies.get("cart"))
+    : { cartItems: [], shippingAddress: {}, paymentMethod: "", email: "" },
 };
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'CART_ADD_ITEM': {
+    case "CART_ADD_ITEM": {
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(
         (item) => item.slug === newItem.slug
@@ -21,30 +21,30 @@ function reducer(state, action) {
             item.name === existItem.name ? newItem : item
           )
         : [...state.cart.cartItems, newItem];
-      Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }));
+      Cookies.set("cart", JSON.stringify({ ...state.cart, cartItems }));
       return { ...state, cart: { ...state.cart, cartItems } };
     }
-    case 'CART_REMOVE_ITEM': {
+    case "CART_REMOVE_ITEM": {
       const cartItems = state.cart.cartItems.filter(
         (item) => item.slug !== action.payload.slug
       );
-      Cookies.set('cart', JSON.stringify({ ...state.cart, cartItems }));
+      Cookies.set("cart", JSON.stringify({ ...state.cart, cartItems }));
       return { ...state, cart: { ...state.cart, cartItems } };
     }
-    case 'CART_RESET':
+    case "CART_RESET":
       return {
         ...state,
         cart: {
           cartItems: [],
           shippingAddress: { location: {} },
-          paymentMethod: '',
+          paymentMethod: "",
         },
       };
-    case 'CART_CLEAR_ITEMS':
+    case "CART_CLEAR_ITEMS":
       return { ...state, cart: { ...state.cart, cartItems: [] } };
 
-    case 'SAVE_SHIPPING_ADDRESS':
-//      console.log("updating address:" + action.payload)
+    case "SAVE_SHIPPING_ADDRESS":
+      //      console.log("updating address:" + action.payload)
       return {
         ...state,
         cart: {
@@ -55,7 +55,7 @@ function reducer(state, action) {
           },
         },
       };
-    case 'SAVE_PAYMENT_METHOD':
+    case "SAVE_PAYMENT_METHOD":
       return {
         ...state,
         cart: {
