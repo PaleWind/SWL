@@ -7,12 +7,13 @@ async function sendEmail(req, res) {
   try {
     //.BODY", req.body);
     const { email } = req.body;
-    const secret = "dd";
+    const secret = process.env.NEXT_PUBLIC_SECRET;
+    console.log("secret", secret);
     const payload = { email: email };
-    const token = jwt.sign(payload, secret, { expiresIn: "15m" });
+    const token = jwt.sign(payload, secret, { expiresIn: "60m" });
 
-    const url =
-      "https://www.shadow-work-lighting.com/reset-password/?token=" + token;
+    //const url = "https://www.shadow-work-lighting.com/reset-password/" + token;
+    const url = "http://localhost:3000/reset-password/" + token;
 
     await sendgrid.send({
       to: ["palu83xoo@gmail.com"], //email,
