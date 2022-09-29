@@ -88,10 +88,10 @@ export default function LoginScreen() {
           Forgot your password? &nbsp;
           <Link
             href={`/forgot-password?redirect=${redirect || "/"}&emailInput=${
-              emailInput || "/"
+              emailInput || ""
             }`}
           >
-            Reset password
+            Reset
           </Link>
         </div>
         <div className="mb-4 ">

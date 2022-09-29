@@ -55,14 +55,14 @@ export default function ForgotPasswordScreen() {
       >
         <h1 className="mb-4 text-xl">Forgot your password?</h1>
         <div className="mb-4">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Enter your email</label>
           <input
             type="text"
             {...register("email", {
               required: "Please enter email",
               pattern: {
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/i,
-                message: "Please enter valid email",
+                message: "Please enter a valid email address",
               },
             })}
             className="w-full"

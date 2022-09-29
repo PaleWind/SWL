@@ -10,7 +10,7 @@ async function sendEmail(req, res) {
     const secret = process.env.NEXT_PUBLIC_SECRET;
     console.log("secret", secret);
     const payload = { email: email };
-    const token = jwt.sign(payload, secret, { expiresIn: "60m" });
+    const token = jwt.sign(payload, secret); //, { expiresIn: "600000m" });
 
     //const url = "https://www.shadow-work-lighting.com/reset-password/" + token;
     const url = "http://localhost:3000/reset-password/" + token;

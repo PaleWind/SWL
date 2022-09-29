@@ -1,6 +1,6 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import React, { useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import Layout from "../../components/Layout";
 import { getError } from "../../utils/error";
@@ -9,130 +9,115 @@ import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import User from "../../models/User";
 import db from "../../utils/db";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import axios from "axios";
+import bcryptjs from "bcryptjs";
 
 export default function ResetPasswordScreen(props) {
+  const { session } = useSession();
   console.log("props", props);
-  //const { data: session } = useSession();
-  const [newPassword, setNewPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+  const formSchema = Yup.object().shape({
+    password: Yup.string()
+      .required("Password is mandatory")
+      .min(6, "Password must be at least 6 characters long"),
+    confirmPassword: Yup.string()
+      .required("Password is mandatory")
+      .oneOf([Yup.ref("password")], "Passwords do not match"),
+  });
+
+  const formOptions = { resolver: yupResolver(formSchema) };
+  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { errors } = formState;
   const router = useRouter();
   const { redirect } = router.query;
-  const { user } = props || {};
+  const { email } = props;
+
   // useEffect(() => {
   //   if (session?.user) {
-  //     router.push(redirect || "/profile");
+  //     //router.push(redirect || "/profile");
   //   }
   // }, [router, session, redirect]);
 
-  const {
-    handleSubmit,
-    register,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm();
-
-  const submitHandler = async () => {
+  const submitHandler = async (data) => {
     try {
-      await db.connect();
-
-      const i = new User({ user });
-      await i.save().then((updatedUser) => {
-        console.log(updatedUser);
+      const { password } = data;
+      await axios.put("/api/auth/resetpw", {
+        email,
+        password: bcryptjs.hashSync(password),
       });
-      await db.disconnect();
-
-      //const result = await sendPasswordResetSuccessEmail(email);
-      if (result.error) {
-        toast.error(result.error);
-      }
-      router.push(redirect || "/");
+      toast.success("Success! You can now login with your new password.");
     } catch (err) {
+      console.log(err);
       toast.error(getError(err));
     }
   };
   return (
     <Layout title="Reset Password">
-      {props.error ? (
-        <div>{props.error}</div>
+      {props?.error ? (
+        <div className="container mt-5">
+          <div className="alert-error">
+            This link has expired! Please request a new one.
+          </div>
+          <div className="mb-4 ">
+            <Link
+              href={`/forgot-password?redirect=${redirect || "/"}&emailInput=`}
+            >
+              Back
+            </Link>
+          </div>
+        </div>
       ) : (
-        <form
-          className="mx-auto max-w-screen-md"
-          onSubmit={handleSubmit(submitHandler)}
-        >
+        <div className="container mt-5">
           <h1 className="mb-4 text-xl">Reset Your Password</h1>
-          <div className="mb-4">
-            <label htmlFor="email">New Password</label>
-            <input
-              type="password"
-              {...register("password", {
-                required: "Please enter password",
-                minLength: {
-                  value: 6,
-                  message: "password is more than 5 chars",
-                },
-              })}
-              className="w-full"
-              id="password"
-              autoFocus
-              onChange={(event) => setNewPassword(event.target.value)}
-              onBlur={() => {
-                if (newPassword !== confirmPassword) {
-                  console.log("newPassword", newPassword);
-                  setError("confirmpassword", {
-                    type: "passwordMatch",
-                    message: "Passwords dont match",
-                  });
-                } else {
-                  clearErrors("confirmpassword");
-                }
-              }}
-            ></input>
-            {errors.email && (
-              <div className="text-red-500">{errors.email.message}</div>
-            )}
-          </div>
-          <div className="mb-4">
-            <label htmlFor="confirmpassword">Confirm New Password</label>
-            <input
-              type="password"
-              {...register("confirmpassword", {
-                required: "Please re-enter password",
-                minLength: {
-                  value: 6,
-                  message: "password is more than 5 chars",
-                },
-              })}
-              className="w-full"
-              id="confirmpassword"
-              autoFocus
-              onChange={(event) => setConfirmPassword(event.target.value)}
-              onBlur={() => {
-                if (newPassword !== confirmPassword) {
-                  console.log("newPassword", newPassword);
-                  setError("confirmpassword", {
-                    type: "passwordMatch",
-                    message: "Passwords dont match",
-                  });
-                } else {
-                  clearErrors("confirmpassword");
-                }
-              }}
-            ></input>
-            {errors.confirmpassword && (
-              <div className="text-red-500 ">
-                {errors.confirmpassword.message}
-              </div>
-            )}
-          </div>
-          <div className="mb-4 ">
-            <button className="primary-button">Reset Password</button>
-          </div>
-          <div className="mb-4 ">
-            Don&apos;t have an account? &nbsp;
-            <Link href={`/register?redirect=${redirect || "/"}`}>Register</Link>
-          </div>
-        </form>
+          <form onSubmit={handleSubmit(submitHandler)}>
+            <div className="mb-4">
+              <label htmlFor="password">Password</label>
+              <input
+                className="w-full"
+                type="password"
+                id="password"
+                {...register("password", {
+                  minLength: {
+                    value: 6,
+                    message: "password is more than 5 chars",
+                  },
+                })}
+              />
+              {errors.password && (
+                <div className="text-red-500 ">{errors.password.message}</div>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="confirmPassword">Confirm Password</label>
+              <input
+                className="w-full"
+                type="password"
+                id="confirmPassword"
+                {...register("confirmPassword", {
+                  validate: (value) => value === getValues("password"),
+                  minLength: {
+                    value: 6,
+                    message: "confirm password is more than 5 chars",
+                  },
+                })}
+              />
+              {errors.confirmPassword && (
+                <div className="text-red-500 ">
+                  {errors.confirmPassword.message}
+                </div>
+              )}
+              {errors.confirmPassword &&
+                errors.confirmPassword.type === "validate" && (
+                  <div className="text-red-500 ">Password do not match</div>
+                )}
+            </div>
+            <div className="mb-4 ">
+              <button className="primary-button">Reset Password</button>
+            </div>
+          </form>
+        </div>
       )}
     </Layout>
   );
@@ -142,24 +127,28 @@ export async function getServerSideProps(context) {
   const { token } = context.params;
   try {
     jwt.verify(token, process.env.NEXT_PUBLIC_SECRET);
-    const payload =
-      JSON.parse(Buffer.from(token?.split(".")[1], "base64").toString()) || "";
-    console.log("payload", payload);
+    const payload = JSON.parse(
+      Buffer.from(token?.split(".")[1], "base64").toString()
+    );
+    const { email } = payload;
+
     await db.connect();
     const user = await User.findOne({
-      email: payload.email,
+      email: email,
     });
-    //console.log("user", user);
     await db.disconnect();
-
-    return {
-      props: {
-        user: JSON.stringify(user),
-      },
-    };
+    if (user) {
+      console.log("user", user);
+      return {
+        props: {
+          email: email,
+        },
+      };
+    }
   } catch (err) {
-    const error = JSON.stringify(err);
-    console.log("err", error);
-    return { props: { error: error } };
+    //   const error = JSON.stringify(err);
+    console.log("err", err);
+    //return { props: { error: "Invalid link!" } };
   }
+  return { props: { error: "Invalid link!" } };
 }

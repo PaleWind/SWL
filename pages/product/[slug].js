@@ -8,8 +8,6 @@ import Layout from "../../components/Layout";
 import Product from "../../models/Product";
 import db from "../../utils/db";
 import { Store } from "../../utils/Store";
-import { Disclosure } from "@headlessui/react";
-//import { ChevronUpIcon } from "@heroicons/react/20/solid";
 
 export default function ProductScreen(props) {
   const { product } = props;
