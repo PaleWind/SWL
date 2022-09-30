@@ -47,6 +47,7 @@ export default function ResetPasswordScreen(props) {
         password: bcryptjs.hashSync(password),
       });
       toast.success("Success! You can now login with your new password.");
+      router.push("/");
     } catch (err) {
       console.log(err);
       toast.error(getError(err));

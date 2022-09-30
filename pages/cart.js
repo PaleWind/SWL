@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { getError } from "../utils/error";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import Cookies from "js-cookie";
+import EstimateShipping from "../components/EstimateShipping";
 
 function CartScreen() {
   const router = useRouter();
@@ -58,6 +59,7 @@ function CartScreen() {
   };
 
   function createOrder(data, actions) {
+    console.log("data", data);
     return actions.order
       .create({
         purchase_units: [
@@ -73,6 +75,7 @@ function CartScreen() {
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
       try {
+        console.log("details", details);
         const fullName = details.purchase_units[0].shipping.name.full_name;
         const email = details.payer.email_address;
         const line1 = details.purchase_units[0].shipping.address.address_line_1;
@@ -99,8 +102,17 @@ function CartScreen() {
           details
         );
         toast.success("Payment successful");
+        dispatch({ type: "CART_CLEAR_ITEMS" });
+        Cookies.set(
+          "cart",
+          JSON.stringify({
+            ...state,
+            cartItems: [],
+          })
+        );
+        router.push(`/order/${data._id}`);
 
-        const res = await axios.post("/api/emails/sendReceipt", {
+        const res = await axios.post("/api/email/sendReceipt", {
           orderID: data._id,
           orderItems: cartItems,
           shippingAddress: address,
@@ -115,19 +127,9 @@ function CartScreen() {
         //   console.log(error);
         //   return;
         // }
-
-        router.push(`/order/${data._id}`);
-        dispatch({ type: "CART_CLEAR_ITEMS" });
-        Cookies.set(
-          "cart",
-          JSON.stringify({
-            ...state,
-            cartItems: [],
-          })
-        );
       } catch (err) {
         console.log(err);
-        ({ type: "PAY_FAIL", payload: getError(err) });
+        dispatch({ type: "PAY_FAIL", payload: getError(err) });
         toast.error(getError(err));
       }
     });
@@ -198,6 +200,7 @@ function CartScreen() {
               </tbody>
             </table>
           </div>
+
           <div className="card p-5">
             <ul>
               {/* <li>
@@ -250,6 +253,10 @@ function CartScreen() {
                 )}
               </li>
             </ul>
+          </div>
+          <div className="overflow-x-auto md:col-span-3"></div>
+          <div className="card p-5 h-auto">
+            <EstimateShipping></EstimateShipping>
           </div>
         </div>
       )}
