@@ -72,10 +72,11 @@ export default function ProductScreen(props) {
           )}
         </div>
         <div></div>
+        {/* diclosuureeeeeeeees */}
         <div>
           <ul>
             <li>
-              <h1 className="text-lg">{product.name}</h1>
+              <h1 className="text-xl text-red-600">{product.name}</h1>
             </li>
             <li>Category: {product.category}</li>
             <li>Description: {product.description}</li>
