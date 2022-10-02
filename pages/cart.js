@@ -176,7 +176,7 @@ function CartScreen() {
                         <Link href={`/product/${item.slug}`}>
                           <a className="flex items-center text-black">
                             <Image
-                              src={item.image[0]}
+                              src={item.image[0] ?? ""}
                               alt={item.name}
                               width={50}
                               height={50}

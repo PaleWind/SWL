@@ -52,7 +52,8 @@ export default function EstimateShipping() {
       const estimates = await axios.post("/api/shipping/estimate-shipping", {
         zipcode: zipcode,
       });
-      const options = estimates.data.filter((estimate) => {
+      console.log("estimates", estimates);
+      estimates = estimates?.data.filter((estimate) => {
         return (
           estimate.service_code === "ups_ground" ||
           (estimate.carrier_id === "se-963358" &&
@@ -62,7 +63,7 @@ export default function EstimateShipping() {
       });
       dispatch({
         type: "SAVE_SHIPPING_ESTIMATES",
-        payload: options,
+        payload: estimates,
       });
     } catch (err) {
       console.log("err from api", err);
@@ -89,10 +90,14 @@ export default function EstimateShipping() {
     <>
       <h1 className="mb-4 text-xl">
         Shipping Options{" "}
-        {shippingEstimates && zipcode ? <>for {zipcode}</> : <></>}
+        {shippingEstimates && shippingEstimates.length ? (
+          <>for {zipcode}</>
+        ) : (
+          <></>
+        )}
       </h1>
       <div className="grid md:grid-cols-4 md:gap-5">
-        {shippingEstimates ? (
+        {shippingEstimates && shippingEstimates.length ? (
           <div className="md:col-span-3">
             <div className="w-full">
               <div className="">
