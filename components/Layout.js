@@ -7,13 +7,16 @@ import { ToastContainer } from "react-toastify";
 import { Menu, Transition } from "@headlessui/react";
 import "react-toastify/dist/ReactToastify.css";
 import { Store } from "../utils/Store";
+import SideBar from "./SideBar";
+import MyIcons from "./MyIcons";
 
 export default function Layout({ title, children }) {
   const { status, data: session } = useSession();
-
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
   const [cartItemsCount, setCartItemsCount] = useState(0);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
   }, [cart.cartItems]);
@@ -302,6 +305,46 @@ export default function Layout({ title, children }) {
     );
   }
 
+  function LoginIcon() {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        className="w-0 h-5 "
+      >
+        {/* <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
+        /> */}
+      </svg>
+    );
+  }
+  function SideBarIcon() {
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+        className="w-6 h-6"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+          fill="#f87171"
+          //stroke="#dc2626"
+          stroke="#6b7280"
+        />
+      </svg>
+    );
+  }
+
   return (
     <>
       <Head>
@@ -313,36 +356,39 @@ export default function Layout({ title, children }) {
       </Head>
 
       <ToastContainer position="bottom-center" limit={1} />
-
+      <SideBar open={open} setOpen={() => setOpen(false)}></SideBar>
       <div className="flex min-h-screen flex-col justify-between ">
         <header>
           <nav className="flex h-12 items-center px-4 justify-between shadow-md">
+            <button onClick={() => setOpen(true)}>
+              <SideBarIcon />
+            </button>
             <Link href="/">
-              <a className="text-lg text-red-600 font-bold animate-pulse hover:text-black">
+              <a className="text-lg text-red-600 font-bold animate-pulse hover:text-gray-500">
                 Shadow Work Lighting
               </a>
             </Link>
             <div>
-              <button className="m-1 px-3 shadow-xl inline-flex justify-center rounded-full bg-gray-900 bg-opacity-90 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                <CartIcon className="pr-2 h-3 w-3" aria-hidden="true" />
-                <Link href="/cart">
-                  <a className="text-white hover:text-white">
-                    Cart
-                    {cartItemsCount > 0 && (
-                      <span className="ml-1 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
-                        {cartItemsCount}
-                      </span>
-                    )}
-                  </a>
-                </Link>
-              </button>
+              <a href="/cart" className="group">
+                {cartItemsCount > 0 && (
+                  <span className="relative left-3 bottom-3 rounded-full bg-red-600 px-2 py-1 text-xs font-bold text-white">
+                    {cartItemsCount}
+                  </span>
+                )}
+                <button className=" px-3 shadow-xl inline-flex justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-sm font-light text-white group-hover:bg-opacity-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                  <div className=" text-white group-hover:text-white">
+                    {" "}
+                    <CartIcon className="px-2 h-3 w-3" aria-hidden="true" />
+                  </div>
+                </button>
+              </a>
               {status === "loading" ? (
                 "Loading"
               ) : session?.user ? (
                 <Menu as="div" className="relative inline-block text-left">
-                  <Menu.Button className="m-1 shadow-xl inline-flex w-full justify-center rounded-full bg-gray-900 bg-opacity-90 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                    <UserIcon className="pr-2" aria-hidden="true" />
-                    {session.user.name}
+                  <Menu.Button className="px-2 m-1 shadow-xl inline-flex w-full justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-sm font-light text-white hover:bg-opacity-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                    <UserIcon className="h-3 w-3" aria-hidden="true" />
+                    <p className="px-1">{session.user.name}</p>
                   </Menu.Button>
                   <Transition
                     //as={Fragment}
@@ -470,9 +516,16 @@ export default function Layout({ title, children }) {
                   </Menu.Items>
                 </Menu>
               ) : (
-                <Link href="/login">
-                  <a className="p-2 text-black">Login</a>
-                </Link>
+                <button className="m-1 px-3 shadow-xl inline-flex justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-sm font-light text-white hover:bg-opacity-50 transition-all transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                  <LoginIcon className="" aria-hidden="true" />
+                  <Link href="/login">
+                    <a className=" px-1 text-white hover:text-white">Login</a>
+                  </Link>
+                </button>
+
+                // <Link href="/login">
+                //   <a className="p-2 text-black">Login</a>
+                // </Link>
               )}
             </div>
           </nav>

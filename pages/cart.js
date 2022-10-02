@@ -147,8 +147,10 @@ function CartScreen() {
       {cartItems.length === 0 ? (
         <div>
           Cart is empty.{" "}
-          <Link className="text-black" href="/">
-            Back to Home
+          <Link href="/">
+            <a className="text-red-600 hover:underline hover:text-gray-500">
+              Back to Home
+            </a>
           </Link>
         </div>
       ) : (
@@ -166,7 +168,10 @@ function CartScreen() {
                 </thead>
                 <tbody>
                   {cartItems.map((item) => (
-                    <tr key={item.slug} className="border-b  hover:bg-gray-100">
+                    <tr
+                      key={item.slug}
+                      className="border-b hover:bg-gray-100 transition-all"
+                    >
                       <td>
                         <Link href={`/product/${item.slug}`}>
                           <a className="flex items-center text-black">

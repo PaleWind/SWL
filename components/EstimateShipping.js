@@ -88,7 +88,7 @@ export default function EstimateShipping() {
   return (
     <>
       <h1 className="mb-4 text-xl">
-        Shipping Options {shippingEstimates ? <>for {zipcode}</> : <></>}
+        Shipping Options {shippingEstimates[0] ? <>for {zipcode}</> : <></>}
       </h1>
       <div className="grid md:grid-cols-4 md:gap-5">
         {shippingEstimates ? (
@@ -112,7 +112,7 @@ export default function EstimateShipping() {
                       ${
                         checked
                           ? "bg-red-500 text-white"
-                          : "bg-white hover:bg-red-200"
+                          : "bg-white hover:bg-red-200 transition-all"
                       }
                        card relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
                         }
@@ -140,7 +140,11 @@ export default function EstimateShipping() {
                                       Delivery in {plan.delivery_days} days.
                                     </span>{" "}
                                     <span aria-hidden="true">&middot;</span>{" "}
-                                    <span className="text-gray-700">
+                                    <span
+                                      className={`${
+                                        checked ? "text-white" : "text-gray-700"
+                                      }`}
+                                    >
                                       ${plan.shipping_amount.amount}
                                     </span>
                                   </RadioGroup.Description>
@@ -172,10 +176,12 @@ export default function EstimateShipping() {
           <form onSubmit={handleSubmit(submitHandler)}>
             <div className="m-4 " onChange={onChangeHandler}>
               <div className="text-sm mb-4">
-                Get shipping options based on your zip code.
+                <p className="text-center ">
+                  Get shipping options based on your zip code.
+                </p>
               </div>
               <input
-                placeHolder="Zip code"
+                placeholder="Zip code"
                 className=""
                 type="text"
                 id="zip"
