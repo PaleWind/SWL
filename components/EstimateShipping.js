@@ -88,7 +88,7 @@ export default function EstimateShipping() {
   return (
     <>
       <h1 className="mb-4 text-xl">
-        Shipping Options {shippingEstimates[0] ? <>for {zipcode}</> : <></>}
+        Shipping Options {shippingEstimates ? <>for {zipcode}</> : <></>}
       </h1>
       <div className="grid md:grid-cols-4 md:gap-5">
         {shippingEstimates ? (
