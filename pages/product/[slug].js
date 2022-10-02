@@ -34,9 +34,10 @@ export default function ProductScreen(props) {
 
   return (
     <Layout title={product.name}>
-      <div className="py-2">
+      {/* <div className="py-2 text-black">
         <Link href="/">back to products</Link>
-      </div>
+      </div> */}
+      <div className="p-3"></div>
       <div className="grid md:grid-cols-4 md:gap-3">
         <div className="md:col-span-2">
           <Image

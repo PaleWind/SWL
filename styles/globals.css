@@ -93,3 +93,7 @@ textarea {
   gap: 10px;
   margin-top: 20px;
 }
+
+.estimate-btn {
+  justify-content: center;
+}

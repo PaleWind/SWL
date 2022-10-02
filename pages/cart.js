@@ -20,6 +20,8 @@ function CartScreen() {
     cart: { cartItems, shippingCost },
   } = state;
 
+  const style = { layout: "vertical", color: "black" };
+
   useEffect(() => {
     const loadPaypalScript = async () => {
       const { data: clientId } = await axios.get("/api/keys/paypal");
@@ -39,9 +41,9 @@ function CartScreen() {
   const itemsPrice = round2(
     cartItems.reduce((a, c) => a + c.quantity * c.price, 0)
   ); // 123.4567 => 123.46
-  const shippingPrice = itemsPrice > 200 ? 0 : 0;
+  const shippingPrice = shippingCost ? 0 : 0;
   const taxPrice = round2(itemsPrice * 0.06);
-  const totalPrice = round2(itemsPrice + shippingCost + taxPrice);
+  const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -144,7 +146,10 @@ function CartScreen() {
       <h1 className="mb-4 text-xl">Shopping Cart</h1>
       {cartItems.length === 0 ? (
         <div>
-          Cart is empty. <Link href="/">Back to Home</Link>
+          Cart is empty.{" "}
+          <Link className="text-black" href="/">
+            Back to Home
+          </Link>
         </div>
       ) : (
         <>
@@ -161,10 +166,10 @@ function CartScreen() {
                 </thead>
                 <tbody>
                   {cartItems.map((item) => (
-                    <tr key={item.slug} className="border-b">
+                    <tr key={item.slug} className="border-b  hover:bg-gray-100">
                       <td>
                         <Link href={`/product/${item.slug}`}>
-                          <a className="flex items-center">
+                          <a className="flex items-center text-black">
                             <Image
                               src={item.image[0]}
                               alt={item.name}
@@ -213,25 +218,27 @@ function CartScreen() {
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Items</div>
-                    <div>${itemsPrice}</div>
+                    <div>${itemsPrice.toFixed(2)}</div>
                   </div>
                 </li>{" "}
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Tax</div>
-                    <div>${taxPrice}</div>
+                    <div>${taxPrice.toFixed(2)}</div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Shipping</div>
-                    <div>${shippingCost > 0 ? shippingCost : "--"}</div>
+                    <div>
+                      ${shippingCost > 0 ? shippingCost.toFixed(2) : "--"}
+                    </div>
                   </div>
                 </li>
                 <li>
                   <div className="mb-2 flex justify-between">
                     <div>Total</div>
-                    <div>${totalPrice}</div>
+                    <div>${totalPrice.toFixed(2)}</div>
                   </div>
                 </li>
                 <li className=" w-full">
@@ -245,6 +252,7 @@ function CartScreen() {
                     <div>Loading...</div>
                   ) : (
                     <PayPalButtons
+                      style={style}
                       createOrder={createOrder}
                       onApprove={onApprove}
                       onError={onError}
