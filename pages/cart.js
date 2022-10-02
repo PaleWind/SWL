@@ -17,7 +17,7 @@ function CartScreen() {
   const router = useRouter();
   const { state, dispatch } = useContext(Store);
   const {
-    cart: { cartItems },
+    cart: { cartItems, shippingCost },
   } = state;
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function CartScreen() {
   ); // 123.4567 => 123.46
   const shippingPrice = itemsPrice > 200 ? 0 : 0;
   const taxPrice = round2(itemsPrice * 0.06);
-  const totalPrice = round2(itemsPrice + shippingPrice + taxPrice);
+  const totalPrice = round2(itemsPrice + shippingCost + taxPrice);
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
@@ -147,118 +147,115 @@ function CartScreen() {
           Cart is empty. <Link href="/">Back to Home</Link>
         </div>
       ) : (
-        <div className="grid md:grid-cols-4 md:gap-5">
-          <div className="overflow-x-auto md:col-span-3">
-            <table className="min-w-full ">
-              <thead className="border-b">
-                <tr>
-                  <th className="p-5 text-left">Item</th>
-                  <th className="p-5 text-right">Quantity</th>
-                  <th className="p-5 text-right">Price</th>
-                  <th className="p-5">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {cartItems.map((item) => (
-                  <tr key={item.slug} className="border-b">
-                    <td>
-                      <Link href={`/product/${item.slug}`}>
-                        <a className="flex items-center">
-                          <Image
-                            src={item.image[0]}
-                            alt={item.name}
-                            width={50}
-                            height={50}
-                          ></Image>
-                          &nbsp;
-                          {item.name}
-                        </a>
-                      </Link>
-                    </td>
-                    <td className="p-5 text-right">
-                      <select
-                        value={item.quantity}
-                        onChange={(e) =>
-                          updateCartHandler(item, e.target.value)
-                        }
-                      >
-                        {[...Array(item.countInStock).keys()].map((x) => (
-                          <option key={x + 1} value={x + 1}>
-                            {x + 1}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="p-5 text-right">${item.price}</td>
-                    <td className="p-5 text-center">
-                      <button onClick={() => removeItemHandler(item)}>
-                        <XCircleIcon className="h-5 w-5"></XCircleIcon>
-                      </button>
-                    </td>
+        <>
+          <div className="grid md:grid-cols-4 md:gap-5">
+            <div className="overflow-x-auto md:col-span-3">
+              <table className="min-w-full ">
+                <thead className="border-b">
+                  <tr>
+                    <th className="p-5 text-left">Item</th>
+                    <th className="p-5 text-right">Quantity</th>
+                    <th className="p-5 text-right">Price</th>
+                    <th className="p-5">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {cartItems.map((item) => (
+                    <tr key={item.slug} className="border-b">
+                      <td>
+                        <Link href={`/product/${item.slug}`}>
+                          <a className="flex items-center">
+                            <Image
+                              src={item.image[0]}
+                              alt={item.name}
+                              width={50}
+                              height={50}
+                            ></Image>
+                            &nbsp;
+                            {item.name}
+                          </a>
+                        </Link>
+                      </td>
+                      <td className="p-5 text-right">
+                        <select
+                          value={item.quantity}
+                          onChange={(e) =>
+                            updateCartHandler(item, e.target.value)
+                          }
+                        >
+                          {[...Array(item.countInStock).keys()].map((x) => (
+                            <option key={x + 1} value={x + 1}>
+                              {x + 1}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className="p-5 text-right">${item.price}</td>
+                      <td className="p-5 text-center">
+                        <button onClick={() => removeItemHandler(item)}>
+                          <XCircleIcon className="h-5 w-5"></XCircleIcon>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-          <div className="card p-5">
-            <ul>
-              {/* <li>
+            <div className="card p-5">
+              <ul>
+                {/* <li>
                 <div className="pb-3 text-xl">
                   Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}) : $
                   {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
                 </div>
               </li> */}
-              <li>
-                <div className="mb-2 flex justify-between">
-                  <div>Items</div>
-                  <div>${itemsPrice}</div>
-                </div>
-              </li>{" "}
-              <li>
-                <div className="mb-2 flex justify-between">
-                  <div>Tax</div>
-                  <div>${taxPrice}</div>
-                </div>
-              </li>
-              <li>
-                <div className="mb-2 flex justify-between">
-                  <div>Shipping</div>
-                  <div>${shippingPrice}</div>
-                </div>
-              </li>
-              <li>
-                <div className="mb-2 flex justify-between">
-                  <div>Total</div>
-                  <div>${totalPrice}</div>
-                </div>
-              </li>
-              <li>
-                {/* <button
+                <li>
+                  <div className="mb-2 flex justify-between">
+                    <div>Items</div>
+                    <div>${itemsPrice}</div>
+                  </div>
+                </li>{" "}
+                <li>
+                  <div className="mb-2 flex justify-between">
+                    <div>Tax</div>
+                    <div>${taxPrice}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="mb-2 flex justify-between">
+                    <div>Shipping</div>
+                    <div>${shippingCost > 0 ? shippingCost : "--"}</div>
+                  </div>
+                </li>
+                <li>
+                  <div className="mb-2 flex justify-between">
+                    <div>Total</div>
+                    <div>${totalPrice}</div>
+                  </div>
+                </li>
+                <li className=" w-full">
+                  {/* <button
                   onClick={() => router.push('/shipping')}
                   className="primary-button w-full"
                 >
                   Check Out
                 </button> */}
-                {isPending ? (
-                  <div>Loading...</div>
-                ) : (
-                  <div className="w-full">
+                  {isPending ? (
+                    <div>Loading...</div>
+                  ) : (
                     <PayPalButtons
                       createOrder={createOrder}
                       onApprove={onApprove}
                       onError={onError}
                     ></PayPalButtons>
-                  </div>
-                )}
-              </li>
-            </ul>
+                  )}
+                </li>
+              </ul>
+            </div>
           </div>
-          <div className="overflow-x-auto md:col-span-3"></div>
-          <div className="card p-5 h-auto">
-            <EstimateShipping></EstimateShipping>
-          </div>
-        </div>
+          <EstimateShipping></EstimateShipping>
+        </>
       )}
     </Layout>
   );
