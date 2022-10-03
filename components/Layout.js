@@ -10,13 +10,14 @@ import { Store } from "../utils/Store";
 import SideBar from "./SideBar";
 import MyIcons from "./MyIcons";
 
-export default function Layout({ title, children }) {
+export default function Layout({ title, children, landing }) {
   const { status, data: session } = useSession();
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
   const [cartItemsCount, setCartItemsCount] = useState(0);
   const [open, setOpen] = useState(false);
-
+  const index = landing === "1";
+  //console.log(landing);
   useEffect(() => {
     setCartItemsCount(cart.cartItems.reduce((a, c) => a + c.quantity, 0));
   }, [cart.cartItems]);
@@ -111,24 +112,6 @@ export default function Layout({ title, children }) {
     );
   }
 
-  function ProfileActiveIcon(props) {
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-6 h-6"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M7.5 7.5h-.75A2.25 2.25 0 004.5 9.75v7.5a2.25 2.25 0 002.25 2.25h7.5a2.25 2.25 0 002.25-2.25v-7.5a2.25 2.25 0 00-2.25-2.25h-.75m-6 3.75l3 3m0 0l3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 012.25 2.25v7.5a2.25 2.25 0 01-2.25 2.25h-7.5a2.25 2.25 0 01-2.25-2.25v-.75"
-        />
-      </svg>
-    );
-  }
   function ArchiveInactiveIcon(props) {
     return (
       <svg
@@ -191,82 +174,6 @@ export default function Layout({ title, children }) {
     );
   }
 
-  function MoveInactiveIcon(props) {
-    return (
-      <svg
-        {...props}
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M10 4H16V10" stroke="#A78BFA" strokeWidth="2" />
-        <path d="M16 4L8 12" stroke="#A78BFA" strokeWidth="2" />
-        <path d="M8 6H4V16H14V12" stroke="#A78BFA" strokeWidth="2" />
-      </svg>
-    );
-  }
-
-  function MoveActiveIcon(props) {
-    return (
-      <svg
-        {...props}
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path d="M10 4H16V10" stroke="#C4B5FD" strokeWidth="2" />
-        <path d="M16 4L8 12" stroke="#C4B5FD" strokeWidth="2" />
-        <path d="M8 6H4V16H14V12" stroke="#C4B5FD" strokeWidth="2" />
-      </svg>
-    );
-  }
-
-  function DeleteInactiveIcon(props) {
-    return (
-      <svg
-        {...props}
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <rect
-          x="5"
-          y="6"
-          width="10"
-          height="10"
-          fill="#EDE9FE"
-          stroke="#A78BFA"
-          strokeWidth="2"
-        />
-        <path d="M3 6H17" stroke="#A78BFA" strokeWidth="2" />
-        <path d="M8 6V4H12V6" stroke="#A78BFA" strokeWidth="2" />
-      </svg>
-    );
-  }
-
-  function DeleteActiveIcon(props) {
-    return (
-      <svg
-        {...props}
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <rect
-          x="5"
-          y="6"
-          width="10"
-          height="10"
-          fill="#8B5CF6"
-          stroke="#C4B5FD"
-          strokeWidth="2"
-        />
-        <path d="M3 6H17" stroke="#C4B5FD" strokeWidth="2" />
-        <path d="M8 6V4H12V6" stroke="#C4B5FD" strokeWidth="2" />
-      </svg>
-    );
-  }
-
   function CartIcon() {
     return (
       <svg
@@ -314,13 +221,7 @@ export default function Layout({ title, children }) {
         strokeWidth={1.5}
         stroke="currentColor"
         className="w-0 h-5 "
-      >
-        {/* <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"
-        /> */}
-      </svg>
+      ></svg>
     );
   }
   function SideBarIcon() {
@@ -364,8 +265,9 @@ export default function Layout({ title, children }) {
               <SideBarIcon />
             </button>
             <Link href="/">
-              <a className="text-lg text-red-600 font-bold animate-pulse hover:text-gray-500">
-                Shadow Work Lighting
+              <a className="flex text-lg text-red-600 font-bold animate-pulse hover:text-gray-500">
+                <p className="">Shadow Work&nbsp;</p>
+                <p className=" hidden md:block">Lighting</p>
               </a>
             </Link>
             <div>
@@ -530,7 +432,13 @@ export default function Layout({ title, children }) {
             </div>
           </nav>
         </header>
-        <main className="container m-auto mt-4 px-4">{children}</main>
+
+        <main
+          className={`container ${index ? "min-w-full" : "m-auto mt-4 px-4"} `}
+        >
+          {children}
+        </main>
+
         <footer className="flex h-10 justify-center items-center shadow-inner">
           <p>Copyright © 2022 Shadow Work Lighting</p>
         </footer>

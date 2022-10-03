@@ -27,10 +27,16 @@ a {
 }
 
 .primary-button {
-  @apply rounded bg-red-500 py-2 px-4 shadow outline-none hover:bg-red-400  active:bg-red-500 text-white;
+  @apply rounded-full bg-red-500 py-2 px-4 shadow outline-none hover:bg-red-400  active:bg-red-500 text-white;
 }
 .default-button {
   @apply rounded bg-gray-100 py-2  px-4 text-black shadow outline-none hover:bg-gray-200  active:bg-gray-300;
+}
+.gray-button {
+  @apply justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-white hover:underline hover:bg-opacity-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
+}
+.red-button {
+  @apply justify-center rounded-full bg-red-500 bg-opacity-90 py-2 text-white hover:underline hover:bg-opacity-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75;
 }
 
 input,
