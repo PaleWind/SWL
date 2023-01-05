@@ -45,9 +45,11 @@ export default function landingPage() {
                     Buy Now
                   </button>
                 </Link>
-                <button className="inline gray-button flex mx-auto font-bold md:mx-2 lg:mx-4 my-6 py-4 px-8 shadow-lg focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
-                  Shop All
-                </button>
+                <Link href="/shop" className="group">
+                  <button className="inline gray-button flex mx-auto font-bold md:mx-2 lg:mx-4 my-6 py-4 px-8 shadow-lg focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                    Shop All
+                  </button>
+                </Link>
               </div>
             </div>
             {/*Right Col*/}

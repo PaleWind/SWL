@@ -8,6 +8,8 @@ import Layout from "../../components/Layout";
 import Product from "../../models/Product";
 import db from "../../utils/db";
 import { Store } from "../../utils/Store";
+import { Disclosure } from "@headlessui/react";
+//        import {ChevronUpIcon} from '@heroicons/react/20/solid'
 
 export default function ProductScreen(props) {
   const { product } = props;
@@ -72,7 +74,7 @@ export default function ProductScreen(props) {
           )}
         </div>
         <div></div>
-        {/* diclosuureeeeeeeees */}
+
         <div>
           <ul>
             <li>
@@ -82,7 +84,44 @@ export default function ProductScreen(props) {
             <li>Description: {product.description}</li>
           </ul>
         </div>
-
+        <div className="w-full px-4 pt-16">
+          <div className="mx-auto w-full max-w-md rounded-2xl bg-white p-2">
+            <Disclosure>
+              {({ open }) => (
+                <>
+                  <Disclosure.Button className="shadow flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-gray-900 hover:bg-red-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-500 focus-visible:ring-opacity-75">
+                    <span>What is your refund policy?</span>
+                    {/* <ChevronUpIcon
+                      className={`${
+                        open ? "rotate-180 transform" : ""
+                      } h-5 w-5 text-purple-500`}
+                    /> */}
+                  </Disclosure.Button>
+                  <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                    You already paid, no takesies backsies
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+            {/*   <Disclosure as="div" className="mt-2">
+              {({ open }) => (
+                <>
+                 <Disclosure.Button className="shadow flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-gray-900 hover:bg-red-200 focus:outline-none focus-visible:ring focus-visible:ring-gray-400 focus-visible:ring-opacity-75">
+                    <span>Do you offer technical support?</span>
+                     <ChevronUpIcon
+                      className={`${
+                        open ? "rotate-180 transform" : ""
+                      } h-5 w-5 text-purple-500`}
+                    /> 
+                  </Disclosure.Button>
+                  <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+                    No.
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>*/}
+          </div>
+        </div>
         <div>
           <div className="card p-5">
             <div className="mb-2 flex justify-between">
