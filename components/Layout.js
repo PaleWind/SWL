@@ -8,8 +8,8 @@ import { Menu, Transition } from "@headlessui/react";
 import "react-toastify/dist/ReactToastify.css";
 import { Store } from "../utils/Store";
 import SideBar from "./SideBar";
-import MyIcons from "./MyIcons";
-
+import { CgProfile } from "react-icons/cg";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 export default function Layout({ title, children, landing }) {
   const { status, data: session } = useSession();
   const { state, dispatch } = useContext(Store);
@@ -174,44 +174,6 @@ export default function Layout({ title, children, landing }) {
     );
   }
 
-  function CartIcon() {
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-5 h-5"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-        />
-      </svg>
-    );
-  }
-
-  function UserIcon() {
-    return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth={1.5}
-        stroke="currentColor"
-        className="w-5 h-5"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-        />
-      </svg>
-    );
-  }
-
   function LoginIcon() {
     return (
       <svg
@@ -258,6 +220,7 @@ export default function Layout({ title, children, landing }) {
 
       <ToastContainer position="bottom-center" limit={1} />
       <SideBar open={open} setOpen={() => setOpen(false)}></SideBar>
+      {/* <SideBar></SideBar> */}
       <div className="flex min-h-screen flex-col justify-between ">
         <header>
           <nav className="flex h-12 items-center px-4 justify-between shadow-md">
@@ -280,7 +243,8 @@ export default function Layout({ title, children, landing }) {
                 <button className=" px-3 shadow-xl inline-flex justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-sm font-light text-white group-hover:bg-opacity-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   <div className=" text-white group-hover:text-white">
                     {" "}
-                    <CartIcon className="px-2 h-3 w-3" aria-hidden="true" />
+                    {/* <CartIcon className="px-2 h-3 w-3" aria-hidden="true" /> */}
+                    <AiOutlineShoppingCart size="20" />
                   </div>
                 </button>
               </a>
@@ -289,7 +253,8 @@ export default function Layout({ title, children, landing }) {
               ) : session?.user ? (
                 <Menu as="div" className="relative inline-block text-left">
                   <Menu.Button className="px-2 m-1 shadow-xl inline-flex w-full justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-sm font-light text-white hover:bg-opacity-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                    <UserIcon className="h-3 w-3" aria-hidden="true" />
+                    {/* <UserIcon className="h-3 w-3" aria-hidden="true" /> */}
+                    <CgProfile size="20" />
                     <p className="px-1">{session.user.name}</p>
                   </Menu.Button>
                   <Transition
