@@ -10,12 +10,12 @@ export default function VideoCarousel({ demos }) {
     },
     {
       id: 2,
-      title: "Sound Mode Testing (Sound On!)",
+      title: "Sound Mode Testing",
       src: "https://res.cloudinary.com/dyjz3ddks/video/upload/c_scale,h_1280,w_720/v1672862667/demos/sstg-F8C9E0A5-11A7-4A55-BCB6-DD35E01724E1_hai1eo.mov",
     },
     {
       id: 3,
-      title: "Prototype v1 (Sound On!)",
+      title: "Prototype v1  🎵",
       src: "https://res.cloudinary.com/dyjz3ddks/video/upload/v1672860950/demos/IMG_6184_vd76nr.mov",
     },
   ];
@@ -35,28 +35,24 @@ export default function VideoCarousel({ demos }) {
   };
 
   return (
-    <Layout title="Tech Demos (Hire Me)">
+    <Layout title="Tech Demos">
       <h1 className="text-center pt-2 pb-2 card">
         {" "}
-        Hover over a video to play. Hire me!
+        Hover over a video to play
       </h1>
       <div className="grid md:grid-cols-3 md:gap-3">
         {videos.map((video) => (
           <div key={video.id} className="md:col-span-1">
-            <div className="">
-              <div className="">
-                <h4 className="">{video.title}</h4>
-                <video
-                  width="240"
-                  height="400"
-                  controls
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <source src={video.src} type="video/mp4" />
-                </video>
-              </div>
-            </div>
+            <h4 className="flex justify-left">{video.title}</h4>
+            <video
+              width="240"
+              height="400"
+              controls
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <source src={video.src} type="video/mp4" />
+            </video>
           </div>
         ))}
       </div>

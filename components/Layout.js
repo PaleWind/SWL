@@ -224,7 +224,7 @@ export default function Layout({ title, children, landing }) {
       <div className="flex min-h-screen flex-col justify-between ">
         <header>
           <nav className="flex h-12 items-center px-4 justify-between shadow-md">
-            <button onClick={() => setOpen(true)}>
+            <button onClick={() => setOpen(!open)}>
               <SideBarIcon />
             </button>
             <Link href="/">
