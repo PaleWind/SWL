@@ -19,12 +19,12 @@ export default function landingPage() {
               </p>
               <div className="flex w-full sm:justify-center">
                 <Link href="/product/shigoto-light" className="group">
-                  <button className="inline red-button flex mx-auto font-bold md:mx-2 lg:mx-4 my-6 py-4 px-8 shadow-lg focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                  <button className="inline red-button mx-auto font-bold md:mx-2 lg:mx-4 my-6 py-4 px-8 shadow-lg focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
                     Buy Now
                   </button>
                 </Link>
                 <Link href="/shop" className="group">
-                  <button className="inline gray-button flex mx-auto font-bold md:mx-2 lg:mx-4 my-6 py-4 px-8 shadow-lg focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                  <button className="inline gray-button mx-auto font-bold md:mx-2 lg:mx-4 my-6 py-4 px-8 shadow-lg focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
                     Shop All
                   </button>
                 </Link>

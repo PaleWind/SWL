@@ -11,7 +11,7 @@ const SideBar = ({ open, setOpen }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
-        <Transition.Child
+        {/* <Transition.Child
           as={Fragment}
           enter="ease-in-out duration-500"
           enterFrom="opacity-0"
@@ -21,66 +21,66 @@ const SideBar = ({ open, setOpen }) => {
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 transition-opacity" />
-        </Transition.Child>
+        </Transition.Child> */}
 
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="top-12 pointer-events-none fixed inset-y-0 left-0 flex max-w-50 w-20 pr-10">
-              <Transition.Child
-                as={Fragment}
-                enter="transform transition ease-in-out duration-500 sm:duration-700"
-                enterFrom="-translate-x-full"
-                enterTo="translate-x-0"
-                leave="transform transition ease-in-out duration-500 sm:duration-700"
-                leaveFrom="translate-x-0"
-                leaveTo="-translate-x-full"
-              >
-                <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="ease-in-out duration-500"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="ease-in-out duration-500"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <div className="absolute top-0 right-0 -ml-8 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
-                      <button
-                        type="button"
-                        className="rounded-md text-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                        onClick={() => setOpen(false)}
-                      ></button>
-                    </div>
-                  </Transition.Child>
-
-                  <div className="fixed left-0 h-screen w-16 flex flex-col bg-white shadow-lg border">
-                    <SideBarIcon
-                      icon={<FaHome size="28" />}
-                      link="/"
-                      text="Home"
-                    ></SideBarIcon>
-                    <Divider />
-                    <SideBarIcon
-                      icon={<FaStoreAlt size="20" />}
-                      link="/shop"
-                      text="Store"
-                    />
-                    <SideBarIcon
-                      icon={<CgProfile size="32" />}
-                      link="/profile"
-                      text="Profile"
-                    />
-                    <SideBarIcon
-                      icon={<FaInfo size="20" />}
-                      link="/demos"
-                      text="About"
-                    />
-                    <Divider />
+            {/* <div className="top-12 pointer-events-none fixed inset-y-0 left-0 flex max-w-50 w-20 pr-10"> */}
+            <Transition.Child
+              as={Fragment}
+              enter="transform transition ease-in-out duration-500 sm:duration-700"
+              enterFrom="-translate-x-full"
+              enterTo="translate-x-0"
+              leave="transform transition ease-in-out duration-500 sm:duration-700"
+              leaveFrom="translate-x-0"
+              leaveTo="-translate-x-full"
+            >
+              <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md">
+                {/* <Transition.Child
+                  as={Fragment}
+                  enter="ease-in-out duration-500"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in-out duration-500"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="absolute top-0 right-0 -ml-8 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
+                    <button
+                      type="button"
+                      className="rounded-md text-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                      onClick={() => setOpen(false)}
+                    ></button>
                   </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
+                </Transition.Child> */}
+
+                <div className="fixed left-0 h-screen w-16 flex flex-col bg-white shadow-lg border">
+                  <SideBarIcon
+                    icon={<FaHome size="28" />}
+                    link="/"
+                    text="Home"
+                  ></SideBarIcon>
+                  <Divider />
+                  <SideBarIcon
+                    icon={<FaStoreAlt size="20" />}
+                    link="/shop"
+                    text="Store"
+                  />
+                  <SideBarIcon
+                    icon={<CgProfile size="32" />}
+                    link="/profile"
+                    text="Profile"
+                  />
+                  <SideBarIcon
+                    icon={<FaInfo size="20" />}
+                    link="/demos"
+                    text="About"
+                  />
+                  <Divider />
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+            {/* </div> */}
           </div>
         </div>
       </Dialog>
@@ -110,7 +110,9 @@ const SideBar = ({ open, setOpen }) => {
 
 const SideBarIcon = ({ icon, text, link }) => (
   <div className="sidebar-icon group">
-    <Link href={link}>{icon}</Link>
+    <Link className="z-50" href={link}>
+      {icon}
+    </Link>
     <span class="sidebar-tooltip group-hover:scale-100">{text}</span>
   </div>
 );

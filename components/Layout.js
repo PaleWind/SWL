@@ -383,7 +383,7 @@ export default function Layout({ title, children, landing }) {
                   </Menu.Items>
                 </Menu>
               ) : (
-                <button className="m-1 px-3 shadow-xl inline-flex justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-sm font-light text-white hover:bg-opacity-50 transition-all transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                <button className="m-1 px-3 shadow-xl inline-flex justify-center rounded-full bg-gray-900 bg-opacity-90 py-2 text-sm font-light text-white hover:bg-opacity-50 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
                   <LoginIcon className="" aria-hidden="true" />
                   <Link href="/login">
                     <a className=" px-1 text-white hover:text-white">Login</a>
